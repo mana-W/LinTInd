@@ -1,0 +1,41 @@
+Package: LinTInd
+Title: Lineage tracing by indels
+Version: 1.0.0
+Authors@R: 
+	c(person(given = "Luyue",family = "Wang",role = c("aut","cre"),email = "wly1995310@gmail.com"),
+	person(given = "Bin",family = "Xiang",role = c("ctb")),
+	person(given = "Hengxin",family = "Liu",role = c("ctb")),
+	person(given = "Wu",family = "Wei",role = c("ths")))
+Description: When we combine gene-editing technology and sequencing technology, 
+	we need to reconstruct a lineage tree from alleles generated and calculate the similarity between each pair of groups.
+	FindIndel() and IndelForm() function will help you align each read to reference sequence and generate scar form strings respectively.
+	IndelIdents() function will help you to define a scar form for each cell or read.
+	IndelPlot() function will help you to visualize the distribution of deletion and insertion.
+	TagProcess() function will help you to extract indels for each cell or read.
+	TagDist() function will help you to calculate the similarity between each pair of groups across the indwells they contain.
+	BuildTree() function will help you to reconstruct a tree.
+	PlotTree() function will help you to visualize the tree.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+biocViews:
+Depends: R (>= 4.0),
+    ggplot2,
+    parallel,
+    stats,S4Vectors
+Imports: 
+    data.tree,
+    reshape2,
+    networkD3,
+    stringdist,
+    purrr,
+    ape,
+    cowplot,
+    ggnewscale,
+    stringr,
+    dplyr,
+    rlist,
+    pheatmap,Biostrings,IRanges,BiocGenerics(>= 0.36.1),ggtree
