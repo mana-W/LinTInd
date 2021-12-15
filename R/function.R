@@ -819,7 +819,7 @@ PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
   indel = data.frame(id=NA,start=NA,end=NA,width=NA,type=NA)
   indel = indel[-1,]
   #build indel data frame
-  for(i in c(1:length(tl[-1]))){
+  for(i in c(1:length(tl))){
     x = tl[i]
     x_str = unlist(strsplit(x,split = "_"))
     del = NULL
