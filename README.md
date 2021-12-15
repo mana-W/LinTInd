@@ -54,8 +54,6 @@ celltype<-paste0(system.file("extdata",package = 'LinTInd'),"/celltype.tsv")
 data<-read.table(data,sep="\t",header=T)
 ref<-ReadFasta(fafile)
 cutsite<-read.table(cutsite,col.names = c("indx","start","end"))
-scarref<-ReadCutsite(cutsite)
-scarref_all<-ReadCutsite(cutsite,reftype="All")
 celltype<-read.table(celltype,header=T,stringsAsFactors=F)
 ```
 Or load the example data
@@ -68,7 +66,7 @@ Alignment
 
 ```
 scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
-scarform<-IndelForm(scarinfo,cln=4)
+scarinfo<-IndelForm(scarinfo,cln=4)
 
 ```
 Define scar pattern for each cell<br />
