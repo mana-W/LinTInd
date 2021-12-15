@@ -1,13 +1,48 @@
 # LinTInd
 
-**Imput：**<br />
+## Installation via GitHub
+```
+devtools::install_github("mana-W/LinTInd")
+```
+* Depends:<br />
+  + ggplot2<br />
+  + parallel<br />
+  + stats<br />
+  + S4Vectors<br />
+  + data.tree<br />
+  + reshape2<br />
+  + networkD3<br />
+  + stringdist<br />
+  + purrr<br />
+  + ape<br />
+  + cowplot<br />
+  + ggnewscale<br />
+  + stringr<br />
+  + dplyr<br />
+  + rlist<br />
+  + pheatmap<br />
+  + Biostrings<br />
+  + IRanges<br />
+  + BiocGenerics(>= 0.36.1)<br />
+  + ggtree<br />
+
+## Installation via Bioconductor
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("LinTInd")
+```
+
+## Usage
+**Input file：**<br />
 *Example files is in LinTInd/inst/extdata*<br />
 data is from CB_UMI<br />
 fa is ref file<br />
 cutsite is a file define each sgRNA start and end positon<br />
 celltype.tsv is a file include cell barcode and its' annotations, header: Cell.BC Cell.type
 
-### Data importing
+### Quick start
 ```
 library(LinTInd)
 data<-paste0(system.file("extdata",package = 'LinTInd'),"/CB_UMI")
