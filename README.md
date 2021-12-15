@@ -79,7 +79,7 @@ Pattern visualization <br />
 IndelPlot(cellsinfo = cellsinfo)
 ```
 <p align="center">
-<img src="https://github.com/mana-W/scar-barcode/blob/main/image/Indel_pattern.png" width = "620" height = "450" align=center />
+<img src="https://github.com/mana-W/LinTInd/tree/main/vignettes/Indel_pattern.png" width = "620" height = "450" align=center />
 </p >
 <br />
 
@@ -101,11 +101,11 @@ treeinfo<-BuildTree(tag)
 tag_dist=TagDist(tag,method = "Jaccard")
 ```
 <p align="center">
-<img src="https://github.com/mana-W/scar-barcode/blob/main/image/Indel.png" width = "500" height = "300" align=center />
+<img src="https://github.com/mana-W/LinTInd/tree/main/vignettes/Indel.png" width = "500" height = "300" align=center />
 </p >
 
 <p align="center">
-<img src="https://github.com/mana-W/scar-barcode/blob/main/image/cluster_similarity.png" width = "490" height = "450" align=center />
+<img src="https://github.com/mana-W/LinTInd/tree/main/vignettes/cluster_similarity.png" width = "490" height = "450" align=center />
 </p >
 
 ***Visualization for tree***
@@ -114,7 +114,7 @@ plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "T")
 plotinfo$p
 ```
 <p align="center">
-<img src="https://github.com/mana-W/scar-barcode/blob/main/image/tree_tag_pattern.png" width = "400" height = "500" align=center />
+<img src="https://github.com/mana-W/LinTInd/tree/main/vignettes/tree_tag_pattern.png" width = "400" height = "400" align=center />
 </p >
 
 Or <br />
@@ -124,5 +124,5 @@ plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "F")
 plotinfo$p
 ```
 <p align="center">
-<img src="https://github.com/mana-W/scar-barcode/blob/main/image/tree_pattern.png" width = "400" height = "500" align=center />
+<img src="https://github.com/mana-W/LinTInd/tree/main/vignettes/tree_pattern.png" width = "400" height = "400" align=center />
 </p >
