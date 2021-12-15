@@ -66,7 +66,7 @@ Alignment
 
 ```
 scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
-scarform<-IndelForm(scarinfo,cln=4)
+scarinfo<-IndelForm(scarinfo,cln=4)
 
 ```
 Define scar pattern for each cell<br />
