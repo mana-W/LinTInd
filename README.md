@@ -54,8 +54,6 @@ celltype<-paste0(system.file("extdata",package = 'LinTInd'),"/celltype.tsv")
 data<-read.table(data,sep="\t",header=T)
 ref<-ReadFasta(fafile)
 cutsite<-read.table(cutsite,col.names = c("indx","start","end"))
-scarref<-ReadCutsite(cutsite)
-scarref_all<-ReadCutsite(cutsite,reftype="All")
 celltype<-read.table(celltype,header=T,stringsAsFactors=F)
 ```
 Or load the example data
