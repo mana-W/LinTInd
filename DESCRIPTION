@@ -1,6 +1,6 @@
 Package: LinTInd
 Title: Lineage tracing by indels
-Version: 1.0.0
+Version: 0.99.0
 Authors@R: 
 	c(person(given = "Luyue",family = "Wang",role = c("aut","cre"),email = "wly1995310@gmail.com"),
 	person(given = "Bin",family = "Xiang",role = c("ctb")),
