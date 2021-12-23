@@ -9,26 +9,24 @@ PlotTree(treeinfo, data.extract = NULL, annotation = NULL, prefix = NULL)
 \arguments{
 \item{treeinfo}{List generate from BuildTree, for more see \code{\link[LinTInd]{BuildTree}}}
 
-\item{data.extract}{(optional) If "F" (default), will not return the indel's information, if it's "T", the opposite}
+\item{data.extract}{(optional) If "FALSE" (default), will not return the indel's information, if it's "TRUE", the opposite}
 
-\item{annotation}{(optional) If "T" (default), the annotation of each cell barcodes have to be provided before, and a heatmap of cells' distribution for each array will be return}
+\item{annotation}{(optional) If "TRUE" (default), the annotation of each cell barcodes have to be provided before, and a heatmap of cells' distribution for each array will be return}
 
 \item{prefix}{(optional) Indels' prefix}
 }
 \value{
-
+A list include a ggplot object, a dataframe show the distribution of each array contained in each group of cells (optional), and a dataframe to create the ggplot object
 }
 \description{
-Function to visualise the array generant tree
+Function to visualise the array generate tree
 }
 \details{
 Title
 }
 \examples{
 data("example_data",package = "LinTInd")
-Shows the distribution of each cell type
-plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "T")
-Only show the tree and indel patterns
-plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "F")
+plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "TRUE")
+plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "FALSE")
 
 }

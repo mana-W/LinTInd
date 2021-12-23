@@ -23,7 +23,7 @@ VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-biocViews:
+biocViews: SingleCell, CRISPR, Alignment
 Depends: R (>= 4.0),
     ggplot2,
     parallel,
