@@ -94,7 +94,7 @@ ReadCutsite = function(segref,reftype=NULL){
 #'
 #' @return A list include two IRanges instances (deletion and insertion)
 #' @importFrom IRanges IRanges
-#' @importFrom S4Vectors mcols
+#' @importFrom S4Vectors mcols mcols<-
 #' @importFrom Biostrings DNAString pairwiseAlignment nucleotideSubstitutionMatrix
 #' @export
 #' @examples
@@ -107,8 +107,8 @@ align_to_range = function(p,s,cut){
   lenp <- length(pn)
   index <- 1
   i <- 0
-  del_flag <- F
-  in_flag <- F
+  del_flag <- FALSE
+  in_flag <- FALSE
   del_start<-c()
   del_end<-c()
   ins_start<-c()
@@ -118,7 +118,7 @@ align_to_range = function(p,s,cut){
     i <- i + 1
     if(sn[[i]] == '-'){
       if(!del_flag){
-        del_flag <- T
+        del_flag <- TRUE
         del_start<-c(del_start,index)
         width <- 1
       }
@@ -128,14 +128,14 @@ align_to_range = function(p,s,cut){
     }
     else{
       if(del_flag){
-        del_flag <- F
+        del_flag <- FALSE
         del_end<-c(del_end,index)
         #print(paste("del stop width", width))
       }
     }
     if(pn[[i]] == '-'){
       if(!in_flag){
-        in_flag <- T
+        in_flag <- TRUE
         ins_start<-c(ins_start,index)
         width <- 1
 
@@ -149,7 +149,7 @@ align_to_range = function(p,s,cut){
     }
     else{
       if(in_flag){
-        in_flag <- F
+        in_flag <- FALSE
         ins_width<-c(ins_width,width)
         ins_editseq<-c(ins_editseq,editseq)
         #print(paste("in stop width", width))
@@ -159,11 +159,11 @@ align_to_range = function(p,s,cut){
       index <- index + 1
   }
   if(del_flag){
-    del_flag <- F
+    del_flag <- FALSE
     del_end<-c(del_end,index)
   }
   if(in_flag){
-    in_flag <- F
+    in_flag <- FALSE
     ins_width<-c(ins_width,width)
     ins_editseq<-c(ins_editseq,editseq)
     #print(paste("in stop width", width))
@@ -196,9 +196,10 @@ align_to_range = function(p,s,cut){
 #'
 #' @return list include IRanges instances (deletion and insertion), a data frame of reads' informations, reference sequenc, dataframe of cut sites
 #' @export
-#' @importFrom Biostrings DNAString pairwiseAlignment nucleotideSubstitutionMatrix
-#' @importFrom IRanges IRanges
+#' @importFrom Biostrings DNAString pairwiseAlignment nucleotideSubstitutionMatrix subseq matchPattern pattern alignedPattern alignedSubject
+#' @importFrom IRanges IRanges subject
 #' @importFrom parallel makeCluster clusterEvalQ parLapply stopCluster clusterExport
+#' @importFrom BiocGenerics score
 #' @examples
 #' data("example_data",package = "LinTInd")
 #' scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
@@ -236,7 +237,7 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
       del=NA
       ins=NA
     }else{
-      scar_pos = matchPattern(scarshort,as.character(pattern(alig)),with.indels = T,max.mismatch = 10)
+      scar_pos = matchPattern(scarshort,as.character(pattern(alig)),with.indels = TRUE,max.mismatch = 10)
       r_read = as.character(subject(alig))
       if(length(scar_pos)!= 0){
         r_scar = testFunction(subseq(as.character(subject(alig)),start=start(scar_pos),end=end(scar_pos)))
@@ -283,11 +284,11 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
   scar_BC<-scar_BC[data$scar.BC!="unknown"]
   data<-data[data$scar.BC!="unknown",]
   saveRDS(list(scar_BC,data),"reads_metadata.rds")
-  write.table(data,"all_UMI_reads_scar_full.txt",quote=F,sep="\t",row.names=F)
+  write.table(data,"all_UMI_reads_scar_full.txt",quote=FALSE,sep="\t",row.names=FALSE)
   data$scar_f<-gsub("[-]", "",as.character(data$scar.BC))
   data_v1<-data
   data_v1<-data_v1[data_v1$scar.BC!="unknown",]
-  write.table(data_v1,"UMI_reads_scar_full.txt",quote=F,sep="\t",row.names=F)
+  write.table(data_v1,"UMI_reads_scar_full.txt",quote=FALSE,sep="\t",row.names=FALSE)
   saveRDS(scar_BC,"indel.rds")
   return(list("INDEL" = scar_BC,"Scar" = data_v1,"indel.coverage"=indel.coverage,"cutsite"=scar,"ref"=scarfull,"scarref"=scarref))
 }
@@ -374,7 +375,7 @@ IndelForm = function(scarinfo,cln){
   scar_form<-gsub(" ","",scar_form)
   data<-scarinfo$Scar
   data$scar_form<-scar_form
-  write.csv(data,"indel_pattern.csv",quote=F,row.names = F)
+  write.csv(data,"indel_pattern.csv",quote=FALSE,row.names = FALSE)
   return(list("INDEL" = scarinfo$INDEL,"Scar" = data,"indel.coverage"=scarinfo$indel.coverage,"cutsite"=scarinfo$cutsite,"ref"=scarinfo$ref,"scarref"=scarinfo$scarref))
 }
 
@@ -393,7 +394,7 @@ IndelForm = function(scarinfo,cln){
 #' @return The list generate from FindIndel, but in 'Scar' element a new column contain scar form strings
 #' @export
 #' @importFrom stringdist stringdistmatrix
-#' @importFrom Biostrings consensusString pairwiseAlignment DNAString nucleotideSubstitutionMatrix
+#' @importFrom Biostrings consensusString pairwiseAlignment DNAString nucleotideSubstitutionMatrix alignedPattern alignedSubject
 #' @importFrom IRanges IRanges
 #'
 #' @examples
@@ -426,7 +427,7 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
                           "reads_pro" = 1,
                           "umi_num" = 1,
                           "umi_pro" = 1,
-                          stringsAsFactors = F)
+                          stringsAsFactors = FALSE)
     INDEL_ranges <- scarinfo$INDEL
     INDEL_ranges <- INDEL_ranges[data_con$pattern!="unkown"]
     #INDEL_ranges <-INDEL_ranges[data$Cell.BC %in% Cell.BC$Var1]
@@ -436,7 +437,7 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
     }
 
     data_con<-data_con[data_con$pattern!="unkown",]
-    write.csv(data_con,"final_scarform.csv",quote=F,row.names = F)
+    write.csv(data_con,"final_scarform.csv",quote=FALSE,row.names = FALSE)
   }else{
   mat  =  nucleotideSubstitutionMatrix(match = 1, mismatch = -3)
   # x = as.character(Cell.BC$Var1)[2]c
@@ -517,7 +518,7 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
                           "reads_pro" = reads_pro,
                           "umi_num" = umi_num,
                           "umi_pro" = umi_pro,
-                          stringsAsFactors = F)
+                          stringsAsFactors = FALSE)
     if(method.use=="consensus"){
       return(list(indel,fin_line))
     }else{
@@ -554,12 +555,12 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
     data_con<-data_con_sub
     INDEL_ranges_man<-INDEL_ranges_man[data_con$pattern!="unkown"]
     data_con<-data_con[data_con$pattern!="unkown",]
-    write.csv(data_con,"final_scarform.csv",quote=F,row.names = F)
+    write.csv(data_con,"final_scarform.csv",quote=FALSE,row.names = FALSE)
     saveRDS(INDEL_ranges_man,"indel_ident.rds")
   }else{
     data_con<-do.call("rbind",data_con)
     data_con<-data_con[data_con$pattern!="unkown",]
-    write.csv(data_con,"final_scarform.csv",quote=F,row.names = F)
+    write.csv(data_con,"final_scarform.csv",quote=FALSE,row.names = FALSE)
 
     INDEL_ranges <- scarinfo$INDEL
     #INDEL_ranges <-INDEL_ranges[data$Cell.BC %in% Cell.BC$Var1]
@@ -584,6 +585,7 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
 #'
 #' @return List with two dataframes: Indels for each cell barcode and cells' annotation
 #' @export
+#' @importFrom S4Vectors na.omit
 #'
 #' @examples
 #' data("example_data",package = "LinTInd")
@@ -737,7 +739,7 @@ BuildTree = function(tag){
   if(!is.null(Cells)){
     cell_tab$celltype = Cells$Cell.type[match(as.character(cell_tab$Var1),Cells$Cell.BC)]
   }
-  write.csv(cell_tab,"cell_tab.csv",row.names = F,quote = F)
+  write.csv(cell_tab,"cell_tab.csv",row.names = FALSE,quote = FALSE)
   return(list(tree=population,info=cell_tab))
 
 }
@@ -745,13 +747,13 @@ BuildTree = function(tag){
 
 #' Title
 #' @title PlotTree
-#' @description Function to visualise the array generant tree
+#' @description Function to visualise the array generate tree
 #' @param treeinfo List generate from BuildTree, for more see \code{\link[LinTInd]{BuildTree}}
-#' @param data.extract (optional) If "F" (default), will not return the indel's information, if it's "T", the opposite
-#' @param annotation (optional) If "T" (default), the annotation of each cell barcodes have to be provided before, and a heatmap of cells' distribution for each array will be return
+#' @param data.extract (optional) If "FALSE" (default), will not return the indel's information, if it's "TRUE", the opposite
+#' @param annotation (optional) If "TRUE" (default), the annotation of each cell barcodes have to be provided before, and a heatmap of cells' distribution for each array will be return
 #' @param prefix (optional) Indels' prefix
 #'
-#' @return
+#' @return A list include a ggplot object, a dataframe show the distribution of each array contained in each group of cells (optional), and a dataframe to create the ggplot object
 #' @export
 #' @importFrom data.tree ToDataFrameNetwork FromDataFrameNetwork ToNewick
 #' @importFrom reshape2 dcast melt
@@ -761,17 +763,15 @@ BuildTree = function(tag){
 #' @importFrom ggplot2 scale_fill_gradient
 #' @importFrom ggplot2 theme aes ggplot geom_ribbon geom_line scale_x_continuous xlab ylab theme_bw geom_segment geom_tile
 #' @importFrom cowplot plot_grid
-#' @importFrom BiocGenerics start end width
+#' @importFrom BiocGenerics start end width type
 #' @importFrom ggnewscale new_scale_color
 #' @importFrom stringr str_extract str_extract_all
 #' @importFrom dplyr summarise group_by
 #' @importFrom rlist list.insert list.order
 #' @examples
 #' data("example_data",package = "LinTInd")
-#' Shows the distribution of each cell type
-#' plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "T")
-#' Only show the tree and indel patterns
-#' plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "F")
+#' plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "TRUE")
+#' plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "FALSE")
 #'
 PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
   tree=treeinfo$tree
@@ -921,10 +921,10 @@ PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
 
   #3.plot integrated tree
   #set expand can change width of the tree
-  p = ggtree(tree_data_sort,size = 0.1, ladderize=F) + geom_tiplab(size = 0.3) +
+  p = ggtree(tree_data_sort,size = 0.1, ladderize=FALSE) + geom_tiplab(size = 0.3) +
     xlim_expand(c(0, 200),panel = "Tree")
 
-  if(annotation=="F"){
+  if(annotation=="FALSE"){
     p1=p + geom_facet(panel = "indel pattern", data = indel,
                       geom = geom_segment,
                       mapping = aes(x = start, xend = end, y =y, yend = y,color=type),
@@ -941,11 +941,11 @@ PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
                  mapping = aes(x = start, xend = end, y =y, yend = y,color=type),
                  size = 0.3)
   }
-  if(data.extract=="T" & annotation=="T"){
+  if(data.extract=="TRUE" & annotation=="TRUE"){
     return(list(p=p1,tagsinfo=tree_cell,indelinfo=indel))
-  }else if(data.extract=="T" & is.null(annotation)){
+  }else if(data.extract=="TRUE" & is.null(annotation)){
     return(list(p=p1,tagsinfo=tree_cell,indelinfo=indel))
-  }else if(data.extract=="T" & annotation=="F"){
+  }else if(data.extract=="TRUE" & annotation=="FALSE"){
     return(list(p=p1,indelinfo=indel))
   }else{
     return(p1)
@@ -982,7 +982,7 @@ PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
 #' @importFrom IRanges IRanges
 #' @importFrom ggplot2 theme aes ggplot geom_ribbon geom_line scale_x_continuous xlab ylab theme_bw
 #' @importFrom cowplot plot_grid
-#' @importFrom BiocGenerics start end width
+#' @importFrom BiocGenerics start end width type
 #'
 #' @examples
 #' data("example_data",package = "LinTInd")
@@ -1073,9 +1073,10 @@ IndelPlot<-function(cellsinfo){
 #' @description If the cell barcode and the anntation of each cell are provided, this function can calculate the relationship between each cell type in three way
 #' @param tag List generate from TagProcess, for more see \code{\link[LinTInd]{TagProcess}}
 #' @param method Denote which method to use:
-#' "Jaccard"(default): calculate the weighted jaccard similarity of indels between each pair of groups;
-#' "P": right-tailed test, compare the Indels intersection level with the hypothetical  result generated from random editing, and the former is expected to be significantly higher than the latter
-#' "spearman": Spearman correlation of indels between each pair of groups
+#'
+#' - "Jaccard"(default): calculate the weighted jaccard similarity of indels between each pair of groups;
+#' - "P": right-tailed test, compare the Indels intersection level with the hypothetical  result generated from random editing, and the former is expected to be significantly higher than the latter;
+#' - "spearman": Spearman correlation of indels between each pair of groups
 #'
 #' @return 2 figures are saved to show the distribution of INDEL and the relationship between groups respectively, the matrix of the relationship between groups is returned
 #' @export
@@ -1108,7 +1109,7 @@ TagDist<-function(tag,method=NULL){
     jac_pred<-as.numeric(unlist(lapply(jac_sample,function(z){z[x,y]})))
     ob<-jac_real/mean(jac_pred)
     zscore<-(jac_real-mean(jac_pred))/sd(jac_pred)
-    p<-pnorm(zscore,lower.tail = F)
+    p<-pnorm(zscore,lower.tail = FALSE)
     return(c(ob,p))
   }
   one_op_stat1<-function(x,jac,jac_sample,clu){
@@ -1120,7 +1121,7 @@ TagDist<-function(tag,method=NULL){
   clone_tab<-clone_tab[apply(clone_tab,1,sum)>=2,]
   annotation_col = data.frame(Group=factor(unlist(str_extract_all(row.names(clone_tab), "[D|I]+"))))
   row.names(annotation_col)<-rownames(clone_tab)
-  pheatmap(t(clone_tab),cluster_cols = F,cluster_rows = F,show_colnames = F,border=FALSE,annotation_col = annotation_col,scale = "row",filename = "tag_heatmap_scale.pdf",width = 5,height = 3)
+  pheatmap(t(clone_tab),cluster_cols = FALSE,cluster_rows = FALSE,show_colnames = FALSE,border=FALSE,annotation_col = annotation_col,scale = "row",filename = "tag_heatmap_scale.pdf",width = 5,height = 3)
 
   if(any(is.null(method),method=="Jaccard")){
     all_jac<-data.frame(matrix(unlist(lapply(clu,one_jac_stat1,clone_stat_data=clone_tab)),ncol=length(clu)))

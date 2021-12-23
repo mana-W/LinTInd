@@ -10,9 +10,11 @@ TagDist(tag, method = NULL)
 \item{tag}{List generate from TagProcess, for more see \code{\link[LinTInd]{TagProcess}}}
 
 \item{method}{Denote which method to use:
-"Jaccard"(default): calculate the weighted jaccard similarity of indels between each pair of groups;
-"P": right-tailed test, compare the Indels intersection level with the hypothetical  result generated from random editing, and the former is expected to be significantly higher than the latter
-"spearman": Spearman correlation of indels between each pair of groups}
+\itemize{
+\item "Jaccard"(default): calculate the weighted jaccard similarity of indels between each pair of groups;
+\item "P": right-tailed test, compare the Indels intersection level with the hypothetical  result generated from random editing, and the former is expected to be significantly higher than the latter;
+\item "spearman": Spearman correlation of indels between each pair of groups
+}}
 }
 \value{
 2 figures are saved to show the distribution of INDEL and the relationship between groups respectively, the matrix of the relationship between groups is returned
