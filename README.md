@@ -110,7 +110,7 @@ tag_dist=TagDist(tag,method = "Jaccard")
 
 ***Visualization for tree***
 ```
-plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "T")
+plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "TRUE")
 plotinfo$p
 ```
 <p align="center">
@@ -120,7 +120,7 @@ plotinfo$p
 Or <br />
 
 ```
-plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "T",annotation = "F")
+plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "FALSE")
 plotinfo$p
 ```
 <p align="center">
