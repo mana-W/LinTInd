@@ -38,7 +38,7 @@ BiocManager::install("LinTInd")
 
 ## Data prepare
 
-To generate the **CB_UMI** will be used before from fastq files.<br />
+To generate the **CB_UMI** from fastq files, which will be used in the following.<br />
 You can use **CB_UMI.sh** in: https://github.com/mana-W/chenlab_you.<br />
 
 
