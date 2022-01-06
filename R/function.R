@@ -411,6 +411,9 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
   Cell.BC<-data.frame(table(data$Cell.BC))
   Cell.BC<-Cell.BC[Cell.BC$Freq>1,]
   data_1<-data[data$Cell.BC %in% Cell.BC$Var1,]
+  if(is.null(method.use)){
+    method.use<-"reads.num"
+  }
   if(all("Cell.BC" %in% names(data),"UMI" %in% names(data))){
     data_1<-data_1[,c("Cell.BC","UMI","scar_f","scar_form")]
   }else if(any("Cell.BC" %in% names(data),"UMI" %in% names(data))){
@@ -968,6 +971,7 @@ PlotTree = function(treeinfo,data.extract=NULL,annotation=NULL,prefix=NULL){
   #grid.draw(gt) # plot with grid draw
 
   #ggsave(gt,filename = paste(outname,"pdf",sep = "."),height = 100,width = 15,units = "cm")
+
 }
 
 
