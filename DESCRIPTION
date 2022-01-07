@@ -27,7 +27,8 @@ biocViews: SingleCell, CRISPR, Alignment
 Depends: R (>= 4.0),
     ggplot2,
     parallel,
-    stats,S4Vectors
+    stats,
+    S4Vectors
 Imports: 
     data.tree,
     reshape2,
@@ -40,4 +41,8 @@ Imports:
     stringr,
     dplyr,
     rlist,
-    pheatmap,Biostrings,IRanges,BiocGenerics(>= 0.36.1),ggtree
+    pheatmap,
+    Biostrings,
+    IRanges,
+    BiocGenerics(>= 0.36.1),
+    ggtree

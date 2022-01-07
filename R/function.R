@@ -1,27 +1,3 @@
-library(ggplot2)
-library(Biostrings)
-library(stringdist)
-library(rlist)
-library(dplyr)
-library(circlize)
-library(RColorBrewer)
-library(parallel)
-library(pheatmap)
-library(reshape2)
-library(ggtree)
-library(data.tree)
-library(networkD3)
-library(stringr)
-library(rlist)
-library(gtable)
-library(tidyverse)
-library(ape)
-library(ggnewscale)
-library(purrr)
-library(IRanges)
-library(cowplot)
-library(S4Vectors)
-
 #' Title
 #' @title ReadFasta
 #' @description  Function to read fasta file to DNAString object
