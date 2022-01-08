@@ -1,10 +1,25 @@
-## version 1.0.0
+## version 0.99.1
 
 ---
 
 
-### Submitted to Bioconductor
+### Bugfixes
 
+- Define the default parameters in IndelIdents()
+- Cancels reading of unnecessary dependent packages
+
+
+## version 0.99.0
+
+---
+
+
+### First built
+
+- Submitted to Bioconductor
+
+
+## version 0.0.0.9000
 
 ---
 
