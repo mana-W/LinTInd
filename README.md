@@ -71,13 +71,13 @@ data("example_data",package = "LinTInd")
 Alignment
 
 ```
-scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
-scarinfo<-IndelForm(scarinfo,cln=4)
+scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=1)
+scarinfo<-IndelForm(scarinfo,cln=1)
 
 ```
 Define scar pattern for each cell<br />
 ```
-cellsinfo<-IndelIdents(scarinfo,method.use="umi.num",cln=4)
+cellsinfo<-IndelIdents(scarinfo,method.use="umi.num",cln=1)
 ```
 
 Pattern visualization <br />

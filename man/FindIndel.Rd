@@ -40,7 +40,7 @@ Title
 }
 \examples{
 data("example_data",package = "LinTInd")
-scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
+scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=1)
 
 
 }

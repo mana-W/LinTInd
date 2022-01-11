@@ -22,6 +22,6 @@ Title
 }
 \examples{
 data("example_data",package = "LinTInd")
-IndelForm(scarinfo,cln=4)
+IndelForm(scarinfo,cln=1)
 
 }

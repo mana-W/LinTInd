@@ -68,8 +68,8 @@ head(celltype,3)
 In the first step, we shold use `FindIndel()` to alignment and find indels, and the function `IndelForm()` will help us to generate an array-form string for each read.
 
 ```{R find indels and generate array-form strings, message=FALSE}
-scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
-scarinfo<-IndelForm(scarinfo,cln=4)
+scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=1)
+scarinfo<-IndelForm(scarinfo,cln=1)
 ```
 
 Then for single-cell sequencing, we shold define a final-version of array-form string for each cell use `IndelIdents()`, there are three method are provided :
@@ -81,7 +81,7 @@ Then for single-cell sequencing, we shold define a final-version of array-form s
 For bulk sequencing, in this step, we will generate a "cell barcode" for each read.
 
 ```{r IndelIdents, message=FALSE}
-cellsinfo<-IndelIdents(scarinfo,method.use="umi.num",cln=4)
+cellsinfo<-IndelIdents(scarinfo,method.use="umi.num",cln=1)
 ```
 
 After define the indels for each cell, we can use `IndelPlot()` to visualise them.

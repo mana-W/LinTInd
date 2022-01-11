@@ -36,7 +36,7 @@ ReadCutsite = function(segref,reftype=NULL){
   colnames(segref) = c("indx","start","end")
   scar = NULL
   type = NULL
-  if(is.null(reftype) | reftype=="Accurate"){
+  if(any(is.null(reftype) | reftype=="Accurate")){
     for (i in 2:nrow(segref)) {
       scar = c(scar,segref[i,]$start:segref[i,]$end)
       type = c(type,rep(segref[i,]$indx,(segref[i,]$end-segref[i,]$start)+1))
@@ -178,7 +178,7 @@ align_to_range = function(p,s,cut){
 #' @importFrom BiocGenerics score
 #' @examples
 #' data("example_data",package = "LinTInd")
-#' scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=8)
+#' scarinfo<-FindIndel(data=data,scarfull=ref,scar=cutsite,indel.coverage="All",type="test",cln=1)
 #'
 #'
 FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverage=NULL,cln){
@@ -339,7 +339,7 @@ change_form_stat<-function(indel){
 #' @importFrom parallel makeCluster clusterEvalQ parLapply stopCluster clusterExport
 #' @examples
 #' data("example_data",package = "LinTInd")
-#' IndelForm(scarinfo,cln=4)
+#' IndelForm(scarinfo,cln=1)
 #'
 IndelForm = function(scarinfo,cln){
   scarref<-scarinfo$scarref
@@ -361,8 +361,8 @@ IndelForm = function(scarinfo,cln){
 #' @description Function to define a scarform for each cell(single cell) or each reads(bulk seq, generate 'cell barcode' for each reads)
 #' @param scarinfo List generate from IndelForm, for more see \code{\link[LinTInd]{IndelForm}}
 #' @param method.use Select how to determine a scar form string for each cell:
-#'                   "reads.num" (default):find the scar with the most reads in the cell；
-#'                   "umi.num":find the scar with the most UMIs in the cell；
+#'                   "reads.num" (default):find the scar with the most reads in the cell;
+#'                   "umi.num":find the scar with the most UMIs in the cell;
 #'                   "consensus":find the consistent sequences in each cell, and then generate scar form strings from the new reads
 #'
 #' @param cln The number of threads
@@ -375,7 +375,7 @@ IndelForm = function(scarinfo,cln){
 #'
 #' @examples
 #' data("example_data",package = "LinTInd")
-#' IndelIdents(scarinfo,method.use="umi.num",cln=4)
+#' IndelIdents(scarinfo,method.use="umi.num",cln=1)
 #'
 #'
 IndelIdents = function(scarinfo,method.use=NULL,cln){
@@ -1101,13 +1101,13 @@ TagDist<-function(tag,method=NULL){
   clone_tab<-clone_tab[apply(clone_tab,1,sum)>=2,]
   annotation_col = data.frame(Group=factor(unlist(str_extract_all(row.names(clone_tab), "[D|I]+"))))
   row.names(annotation_col)<-rownames(clone_tab)
-  pheatmap(t(clone_tab),cluster_cols = FALSE,cluster_rows = FALSE,show_colnames = FALSE,border=FALSE,annotation_col = annotation_col,scale = "row",filename = "tag_heatmap_scale.pdf",width = 5,height = 3)
+  pheatmap(t(clone_tab),cluster_cols = FALSE,cluster_rows = FALSE,show_colnames = FALSE,annotation_col = annotation_col,scale = "row",filename = "tag_heatmap_scale.pdf",width = 5,height = 3)
 
   if(any(is.null(method),method=="Jaccard")){
     all_jac<-data.frame(matrix(unlist(lapply(clu,one_jac_stat1,clone_stat_data=clone_tab)),ncol=length(clu)))
     names(all_jac)<-clu
     row.names(all_jac)<-clu
-    pheatmap(all_jac,file="group_dist.pdf",width = 4.9,height = 4.5)
+    pheatmap(all_jac,filename="group_dist.pdf",width = 4.9,height = 4.5)
     return(all_jac)
   }else if(method=="P"){
     all_jac<-data.frame(matrix(unlist(lapply(clu,one_jac_stat1,clone_stat_data=clone_tab)),ncol=length(clu)))
@@ -1135,13 +1135,13 @@ TagDist<-function(tag,method=NULL){
     row.names(all_p)<-clu
 
     all_p[is.na(all_p)] = 0
-    pheatmap(-log2(all_p+min(all_p[all_p!=0])),main = "log2(P.val)",file="group_dist.pdf",width = 4.9,height = 4.7)
+    pheatmap(-log2(all_p+min(all_p[all_p!=0])),main = "log2(P.val)",filename="group_dist.pdf",width = 4.9,height = 4.7)
     return(all_p)
   }else if(method=="spearman"){
     clone_tab_new<-t(apply(clone_tab,1,function(x){x/sum(x)}))
     clone_tab_new<-apply(clone_tab_new,2,function(x){x/sum(x)})
     cor_s<-cor(clone_tab_new,method = "spearman")
-    pheatmap(cor_s,file="group_dist.pdf",width = 4.9,height = 4.5)
+    pheatmap(cor_s,filename="group_dist.pdf",width = 4.9,height = 4.5)
     return(cor_s)
   }
 }

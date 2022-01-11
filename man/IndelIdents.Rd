@@ -10,8 +10,8 @@ IndelIdents(scarinfo, method.use = NULL, cln)
 \item{scarinfo}{List generate from IndelForm, for more see \code{\link[LinTInd]{IndelForm}}}
 
 \item{method.use}{Select how to determine a scar form string for each cell:
-"reads.num" (default):find the scar with the most reads in the cell；
-"umi.num":find the scar with the most UMIs in the cell；
+"reads.num" (default):find the scar with the most reads in the cell;
+"umi.num":find the scar with the most UMIs in the cell;
 "consensus":find the consistent sequences in each cell, and then generate scar form strings from the new reads}
 
 \item{cln}{The number of threads}
@@ -27,7 +27,7 @@ Title
 }
 \examples{
 data("example_data",package = "LinTInd")
-IndelIdents(scarinfo,method.use="umi.num",cln=4)
+IndelIdents(scarinfo,method.use="umi.num",cln=1)
 
 
 }

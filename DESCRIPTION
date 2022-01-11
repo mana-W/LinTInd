@@ -15,8 +15,7 @@ Description: When we combine gene-editing technology and sequencing technology,
 	TagDist() function will help you to calculate the similarity between each pair of groups across the indwells they contain.
 	BuildTree() function will help you to reconstruct a tree.
 	PlotTree() function will help you to visualize the tree.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
