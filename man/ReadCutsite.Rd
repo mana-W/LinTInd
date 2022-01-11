@@ -4,7 +4,7 @@
 \alias{ReadCutsite}
 \title{ReadCutsite}
 \usage{
-ReadCutsite(cutsite,reftype="Accurate")
+ReadCutsite(segref,reftype=NULL)
 }
 \arguments{
 \item{segref}{The cutsite file}
