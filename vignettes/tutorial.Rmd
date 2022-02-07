@@ -124,3 +124,8 @@ plotinfo<-PlotTree(treeinfo = treeinfo,data.extract = "TRUE",annotation = "TRUE"
 plotinfo$p
 ```
 
+## Session Info
+
+```{r sessionInfo, echo=TRUE}
+sessionInfo()
+```
