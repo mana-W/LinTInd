@@ -20,7 +20,7 @@ ReadFasta = function(filename){
 #' Title
 #' @title ReadCutsite
 #' @description Function to create a reference dataframe include each position and its' group
-#' @usage ReadCutsite(cutsite,reftype="Accurate")
+#' @usage ReadCutsite(segref,reftype=NULL)
 #' @param segref The cutsite file
 #' @param reftype Choose the reference type you want, if reftype="Accurate" (default), there will only the target sites be generated; if reftype="All", each site will be generated
 #'
@@ -183,7 +183,7 @@ align_to_range = function(p,s,cut){
 #'
 FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverage=NULL,cln){
   scarref<-ReadCutsite(scar,reftype=indel.coverage)
-  mat  =  nucleotideSubstitutionMatrix(match = 1, mismatch = -3)
+  mat  =  Biostrings::nucleotideSubstitutionMatrix(match = 1, mismatch = -3)
   testFunction  =  function (data_in) {
     return(tryCatch(data_in, error=function(e) "unknown"))
   }
@@ -200,10 +200,10 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
   #type="none"
   find_barcode<-function(data){
     #tycpe="none"
-    s3<-DNAString(as.character(data))
-    alig<-pairwiseAlignment(scarfull,s3,substitutionMatrix = mat,type="global-local",gapOpening = 6, gapExtension= 1)
+    s3<-Biostrings::DNAString(as.character(data))
+    alig<-Biostrings::pairwiseAlignment(scarfull,s3,substitutionMatrix = mat,type="global-local",gapOpening = 6, gapExtension= 1)
     if(any(is.null(indel.coverage),indel.coverage=="Accurate")){
-      scarshort = subseq(as.character(scarfull[[1]]),scar["start"][1,],scar["end"][1,])
+      scarshort = Biostrings::subseq(as.character(scarfull[[1]]),scar["start"][1,],scar["end"][1,])
     }else{
       scarshort = as.character(scarfull[[1]])
     }
@@ -213,7 +213,7 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
       del=NA
       ins=NA
     }else{
-      scar_pos = matchPattern(scarshort,as.character(pattern(alig)),with.indels = TRUE,max.mismatch = 10)
+      scar_pos = Biostrings::matchPattern(scarshort,as.character(Biostrings::pattern(alig)),with.indels = TRUE,max.mismatch = 10)
       r_read = as.character(subject(alig))
       if(length(scar_pos)!= 0){
         r_scar = testFunction(subseq(as.character(subject(alig)),start=start(scar_pos),end=end(scar_pos)))
@@ -222,8 +222,8 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
       }
       stopifnot(is(alig, "PairwiseAlignments"), length(data) == 1L)
 
-      p <- as.character(alignedPattern(alig)[[1L]])
-      s <- as.character(alignedSubject(alig)[[1L]])
+      p <- as.character(Biostrings::alignedPattern(alig)[[1L]])
+      s <- as.character(Biostrings::alignedSubject(alig)[[1L]])
       if(any(is.null(indel.coverage),indel.coverage=="Accurate")){
         delins = align_to_range(p,s,scar["start"][1,])
       }else{
@@ -240,7 +240,6 @@ FindIndel = function(data,scarfull,scar,align_score=NULL,type=NULL,indel.coverag
   }
 
   cl = makeCluster(cln,setup_strategy = "sequential")
-  clusterEvalQ(cl,library(Biostrings))
   #environment(align_score) <- .GlobalEnv
   #environment(scarfull) <- .GlobalEnv
   #environment(scar) <- .GlobalEnv
@@ -439,20 +438,20 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
       ins=NA
     }else{
       if(method.use=="consensus"){
-        scarstrdist = stringdistmatrix(as.character(read_data$Var1),as.character(read_data$Var1))
+        scarstrdist = stringdist::stringdistmatrix(as.character(read_data$Var1),as.character(read_data$Var1))
         scarindex = which(apply(scarstrdist,1,function(x){sum(read_data$Freq[which(x<9)])>(sum(read_data$Freq)/3)}))
         if(length(scarindex) > 0){
-          fin_read = consensusString(temreads$scar_f[temreads$scar_f %in% as.character(read_data$Var1)[scarindex]])
+          fin_read = Biostrings::consensusString(temreads$scar_f[temreads$scar_f %in% as.character(read_data$Var1)[scarindex]])
           reads_pro = round(length(which(temreads$scar_f %in%as.character(read_data$Var1)[scarindex]))/sum(read_data$Freq),4)
           reads_num = length(which(temreads$scar_f %in%as.character(read_data$Var1)[scarindex]))
           umi_num = length(unique(temreads$UMI[which(temreads$scar_f %in%as.character(read_data$Var1)[scarindex])]))
           umi_pro = round(umi_num/length(unique(temreads$UMI)),4)
           fin_read_cons = gsub("\\?","",fin_read)
-          s1 = DNAString(fin_read_cons)
-          aligc = pairwiseAlignment(scarfull,s1,substitutionMatrix = mat,type="global-local",gapOpening = 6, gapExtension = 1)
+          s1 = Biostrings::DNAString(fin_read_cons)
+          aligc = Biostrings::pairwiseAlignment(scarfull,s1,substitutionMatrix = mat,type="global-local",gapOpening = 6, gapExtension = 1)
           stopifnot(is(aligc, "PairwiseAlignments"), length(x) == 1L)
-          p <- as.character(alignedPattern(aligc)[[1L]])
-          s.cons <- as.character(alignedSubject(aligc)[[1L]])
+          p <- as.character(Biostrings::alignedPattern(aligc)[[1L]])
+          s.cons <- as.character(Biostrings::alignedSubject(aligc)[[1L]])
           if(any(is.null(indel.coverage),indel.coverage=="Accurate")){
             indel = align_to_range(p,s.cons,scar["start"][1,])
           }else{
@@ -505,8 +504,6 @@ IndelIdents = function(scarinfo,method.use=NULL,cln){
     }
   }
   cl = makeCluster(cln,setup_strategy = "sequential")
-  clusterEvalQ(cl,library(Biostrings))
-  clusterEvalQ(cl,library(stringdist))
   #environment(data_1) <- .GlobalEnv
   #environment(max_reads_stat) <- .GlobalEnv
   #environment(Cell.BC) <- .GlobalEnv
@@ -1145,3 +1142,5 @@ TagDist<-function(tag,method=NULL){
     return(cor_s)
   }
 }
+
+
